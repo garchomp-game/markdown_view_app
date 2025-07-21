@@ -3,6 +3,7 @@
 import os
 import re
 import json
+import unicodedata
 from flask import Flask, render_template_string, abort, jsonify, request
 import markdown
 from markdown.extensions.toc import TocExtension
@@ -19,20 +20,27 @@ def get_md_files_structure():
     """
     ディレクトリを再帰的に探索し、.mdファイルの情報をリストで取得します。
     ファイル名のプレフィックスはソートにのみ使用し、表示用の名前からは除去します。
+    階層構造を保持して正しい順序でファイルを並べます。
     """
     md_files_info = []
-    file_index = 0
+    
+    # まずすべてのファイル情報を収集
     for root, dirs, files in os.walk(DOCS_DIR, topdown=True):
         if '.venv' in dirs: dirs.remove('.venv')
         if 'app.py' in files: files.remove('app.py')
 
-        dirs.sort()
-        files.sort()
+        dirs.sort()  # ディレクトリを番号順でソート
+        files.sort()  # ファイルを番号順でソート
         
         depth = root.count(os.sep) if root != '.' else 0
         
         for filename in files:
             if filename.endswith('.md'):
+                # 接頭辞に番号がついていない場合はスキップ
+                match = re.match(r'^\d+_', filename)
+                if not match:
+                    continue
+                    
                 full_path = os.path.join(root, filename)
                 
                 # ファイル内容を読み込んで統計情報を取得
@@ -43,19 +51,40 @@ def get_md_files_structure():
                 char_count = len(content)
                 estimated_reading_time = max(1, char_count // 400)
                 
-                match = re.match(r'^\d+_', filename)
-                clean_name_with_ext = filename[len(match.group(0)):] if match else filename
+                clean_name_with_ext = filename[len(match.group(0)):]
+                
+                # ソート用のキーを生成（パス全体を使用して階層順序を保持）
+                sort_key = []
+                path_parts = full_path.replace(DOCS_DIR, '').strip('/').split('/')
+                for part in path_parts:
+                    if part.endswith('.md'):
+                        # ファイルの場合
+                        match = re.match(r'^(\d+)_', part)
+                        sort_key.append(int(match.group(1)) if match else 999)
+                    else:
+                        # ディレクトリの場合
+                        match = re.match(r'^(\d+)_', part)
+                        sort_key.append(int(match.group(1)) if match else 999)
                 
                 md_files_info.append({
                     'path': full_path,
                     'depth': depth,
                     'clean_name': clean_name_with_ext.replace('.md', ''),
-                    'index': file_index,
                     'char_count': char_count,
                     'estimated_reading_time': estimated_reading_time,
-                    'content': content
+                    'content': content,
+                    'sort_key': sort_key  # ソート用キー
                 })
-                file_index += 1
+    
+    # ソートキーを使用して正しい階層順序でソート
+    md_files_info.sort(key=lambda x: x['sort_key'])
+    
+    # インデックスを再割り当て
+    for i, file_info in enumerate(md_files_info):
+        file_info['index'] = i
+        # ソートキーは不要なので削除
+        del file_info['sort_key']
+    
     return md_files_info
 
 def extract_headings(content):
