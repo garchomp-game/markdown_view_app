@@ -36,6 +36,40 @@ Markdownファイルを読みやすく表示するWebアプリケーション。
 - pip
 
 ### セットアップ
+
+#### 仮想環境を使用する場合（推奨）
+
+**Windows:**
+```bash
+# 仮想環境を作成
+python -m venv .venv
+
+# 仮想環境を有効化
+.venv\Scripts\activate
+
+# 依存関係のインストール
+pip install flask markdown
+
+# アプリケーション起動
+python app.py
+```
+
+**macOS/Linux:**
+```bash
+# 仮想環境を作成
+python3 -m venv .venv
+
+# 仮想環境を有効化
+source .venv/bin/activate
+
+# 依存関係のインストール
+pip install flask markdown
+
+# アプリケーション起動
+python app.py
+```
+
+#### グローバル環境に直接インストールする場合
 ```bash
 # 依存関係のインストール
 pip install flask markdown

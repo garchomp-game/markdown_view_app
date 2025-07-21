@@ -595,18 +595,18 @@ function saveReadingProgress() {
         }, 1000);
     });
     
-    // ページ読み込み時に進捗を自動復元
-    const currentPath = window.location.pathname;
-    const savedProgress = localStorage.getItem(`progress-${currentPath}`);
-    if (savedProgress && savedProgress > 10) {
-        // 自動的に復元（確認なし）
-        setTimeout(() => {
-            window.scrollTo({
-                top: (document.documentElement.scrollHeight - window.innerHeight) * (savedProgress / 100),
-                behavior: 'smooth'
-            });
-        }, 500);
-    }
+    // ページ読み込み時の進捗復元機能を無効化（ユーザーの要求により）
+    // const currentPath = window.location.pathname;
+    // const savedProgress = localStorage.getItem(`progress-${currentPath}`);
+    // if (savedProgress && savedProgress > 10) {
+    //     // 自動的に復元（確認なし）
+    //     setTimeout(() => {
+    //         window.scrollTo({
+    //             top: (document.documentElement.scrollHeight - window.innerHeight) * (savedProgress / 100),
+    //             behavior: 'smooth'
+    //         });
+    //     }, 500);
+    // }
 }
 </script>
 """
