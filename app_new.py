@@ -94,11 +94,8 @@ def get_md_files_structure():
                             match = re.match(r'^(\d+)_', part)
                             sort_key.append(int(match.group(1)) if match else 999)
                     
-                    # 相対パス（URLで使用）
-                    relative_path = os.path.relpath(full_path, DOCS_DIR)
-                    
                     file_info = FileInfo(
-                        path=relative_path,  # 相対パスを使用
+                        path=full_path,
                         name=clean_name,
                         content=content,
                         size=file_size,
@@ -199,97 +196,6 @@ def index():
         'next_file': None,
         'word_count': None,
         'reading_time': None
-    }
-    
-    return render_template('index.html', **context)
-
-@app.route('/all')
-def view_all():
-    """すべてのMarkdownファイルを一枚綴りで表示"""
-    files = get_md_files_structure()
-    
-    if not files:
-        return render_template('index.html', **{
-            'files': [],
-            'total_files': 0,
-            'current_file': None,
-            'content': '<p>No markdown files found.</p>',
-            'current_index': None,
-            'progress_percentage': 0,
-            'prev_file': None,
-            'next_file': None,
-            'word_count': 0,
-            'reading_time': 0,
-            'view_mode': 'all'
-        })
-    
-    # すべてのファイルの内容を結合
-    combined_content = []
-    total_word_count = 0
-    total_reading_time = 0
-    
-    for i, file in enumerate(files, 1):
-        try:
-            # ファイル内容を読み込み
-            file_path = os.path.join(DOCS_DIR, file.path)
-            
-            if not os.path.exists(file_path):
-                continue
-                
-            with open(file_path, 'r', encoding='utf-8') as f:
-                content = f.read()
-            
-            # セクション区切りを追加
-            section_header = f'<div class="document-section" data-file="{file.path}">'
-            section_header += f'<h1 class="section-title">{i}. {file.name}</h1>'
-            section_header += f'<div class="section-meta">File: {file.path}</div>'
-            
-            # MarkdownをHTMLに変換
-            html_content = process_markdown(content)
-            
-            # 統計情報を計算
-            word_count = count_words(content)
-            reading_time = calculate_reading_time(content)
-            
-            total_word_count += word_count
-            total_reading_time += reading_time
-            
-            # セクションとして追加
-            combined_content.append(section_header)
-            combined_content.append(html_content)
-            combined_content.append('</div>')
-            
-            # セクション間の区切り
-            if i < len(files):
-                combined_content.append('<hr class="section-divider">')
-                
-        except Exception as e:
-            # エラーハンドリング
-            error_content = f'<div class="error-section"><p>Error loading {file.name}: {str(e)}</p></div>'
-            combined_content.append(error_content)
-    
-    # 結合されたコンテンツ
-    final_content = '\n'.join(combined_content)
-    
-    # 仮想ファイル情報を作成
-    virtual_file = FileInfo(
-        path='all',
-        name='All Documents (Combined View)',
-        content=final_content
-    )
-    
-    context = {
-        'files': files,
-        'total_files': len(files),
-        'current_file': virtual_file,
-        'content': final_content,
-        'current_index': 'ALL',
-        'progress_percentage': 100,
-        'prev_file': None,
-        'next_file': None,
-        'word_count': total_word_count,
-        'reading_time': total_reading_time,
-        'view_mode': 'all'
     }
     
     return render_template('index.html', **context)
