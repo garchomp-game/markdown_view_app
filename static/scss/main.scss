@@ -1,0 +1,185 @@
+// Main SCSS entry point for Markdown Reader
+// =========================================
+
+// Import order is important!
+@import 'variables';
+@import 'base';
+@import 'layout';
+@import 'components';
+
+// Theme definitions override the default variables
+// ================================================
+
+[data-theme="light"] {
+  // Light theme colors
+  --color-bg-primary: #ffffff;
+  --color-bg-secondary: #f8fafc;
+  --color-bg-tertiary: #f1f5f9;
+  --color-text-primary: #1e293b;
+  --color-text-secondary: #64748b;
+  --color-text-muted: #94a3b8;
+  --color-border: #e2e8f0;
+  --color-hover-bg: #f1f5f9;
+  --color-code-bg: #f3f4f6;
+  --color-code-text: #111827;
+  --color-highlight: #fef3c7;
+}
+
+[data-theme="dark"] {
+  // Dark theme colors
+  --color-bg-primary: #1e293b;
+  --color-bg-secondary: #0f172a;
+  --color-bg-tertiary: #334155;
+  --color-text-primary: #f1f5f9;
+  --color-text-secondary: #cbd5e1;
+  --color-text-muted: #64748b;
+  --color-border: #475569;
+  --color-hover-bg: #334155;
+  --color-code-bg: #0f172a;
+  --color-code-text: #e2e8f0;
+  --color-highlight: #451a03;
+}
+
+// System preference detection
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    --color-bg-primary: #1e293b;
+    --color-bg-secondary: #0f172a;
+    --color-bg-tertiary: #334155;
+    --color-text-primary: #f1f5f9;
+    --color-text-secondary: #cbd5e1;
+    --color-text-muted: #64748b;
+    --color-border: #475569;
+    --color-hover-bg: #334155;
+    --color-code-bg: #0f172a;
+    --color-code-text: #e2e8f0;
+    --color-highlight: #451a03;
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) {
+    --color-bg-primary: #ffffff;
+    --color-bg-secondary: #f8fafc;
+    --color-bg-tertiary: #f1f5f9;
+    --color-text-primary: #1e293b;
+    --color-text-secondary: #64748b;
+    --color-text-muted: #94a3b8;
+    --color-border: #e2e8f0;
+    --color-hover-bg: #f1f5f9;
+    --color-code-bg: #f3f4f6;
+    --color-code-text: #111827;
+    --color-highlight: #fef3c7;
+  }
+}
+
+// Focus management for accessibility
+// ==================================
+*:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+// Keyboard navigation improvements
+.js-focus-visible *:focus:not(.focus-visible) {
+  outline: none;
+}
+
+// Smooth scrolling for anchor links
+html {
+  scroll-behavior: smooth;
+}
+
+// Reduced motion preferences
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  .loading-spinner {
+    animation: none;
+  }
+  
+  .loading-skeleton {
+    animation: none;
+  }
+}
+
+// High contrast mode support
+@media (prefers-contrast: high) {
+  :root {
+    --color-border: #000000;
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 1);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 1);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 1);
+  }
+  
+  [data-theme="dark"] {
+    --color-border: #ffffff;
+  }
+}
+
+// Print optimizations
+@media print {
+  * {
+    background: transparent !important;
+    color: black !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+  
+  a,
+  a:visited {
+    text-decoration: underline;
+  }
+  
+  a[href]:after {
+    content: " (" attr(href) ")";
+  }
+  
+  abbr[title]:after {
+    content: " (" attr(title) ")";
+  }
+  
+  .ir a:after,
+  a[href^="javascript:"]:after,
+  a[href^="#"]:after {
+    content: "";
+  }
+  
+  pre,
+  blockquote {
+    border: 1px solid #999;
+    page-break-inside: avoid;
+  }
+  
+  thead {
+    display: table-header-group;
+  }
+  
+  tr,
+  img {
+    page-break-inside: avoid;
+  }
+  
+  img {
+    max-width: 100% !important;
+  }
+  
+  p,
+  h2,
+  h3 {
+    orphans: 3;
+    widows: 3;
+  }
+  
+  h2,
+  h3 {
+    page-break-after: avoid;
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "name": "markdown-reader",
+  "version": "1.0.0",
+  "description": "Interactive Markdown Reader with SCSS styling",
+  "main": "app.py",
+  "scripts": {
+    "build-css": "sass static/scss/main.scss static/css/main.css --style=expanded --source-map",
+    "watch-css": "sass static/scss/main.scss static/css/main.css --style=expanded --source-map --watch",
+    "build-css-prod": "sass static/scss/main.scss static/css/main.css --style=compressed --no-source-map",
+    "dev": "concurrently \"npm run watch-css\" \"python app.py\"",
+    "start": "python app.py",
+    "build": "npm run build-css-prod"
+  },
+  "keywords": [
+    "markdown",
+    "reader",
+    "flask",
+    "scss",
+    "documentation"
+  ],
+  "author": "Markdown Reader",
+  "license": "MIT",
+  "devDependencies": {
+    "sass": "^1.69.5",
+    "concurrently": "^8.2.2"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}

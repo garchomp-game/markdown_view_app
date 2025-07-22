@@ -1,0 +1,14 @@
+# Flask Web Framework
+Flask==3.0.0
+
+# Markdown processing
+Markdown==3.5.1
+
+# Syntax highlighting for code blocks
+Pygments==2.17.2
+
+# Optional: SCSS compilation (alternative to Node.js sass)
+libsass==0.22.0
+
+# Development dependencies
+Werkzeug==3.0.1

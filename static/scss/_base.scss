@@ -1,0 +1,144 @@
+// Base Styles for Markdown Reader
+// ===============================
+
+// CSS Reset and Base Styles
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-text-size-adjust: 100%;
+  -moz-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  scroll-behavior: smooth;
+  
+  // Ensure full height and proper background
+  height: 100%;
+  min-height: 100vh;
+  background-color: var(--color-bg-secondary);
+  transition: background-color var(--transition-normal);
+}
+
+body {
+  font-family: var(--font-family-sans);
+  color: var(--color-text-primary);
+  background-color: var(--color-bg-secondary);
+  line-height: var(--line-height-normal);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  
+  // Ensure full height
+  height: 100%;
+  min-height: 100vh;
+  transition: all var(--transition-normal);
+}
+
+// Improved focus management
+:focus-visible {
+  outline: 2px solid var(--color-focus-ring);
+  outline-offset: 2px;
+}
+
+// Links
+a {
+  color: var(--color-primary);
+  text-decoration: underline;
+  transition: color var(--transition-fast);
+  
+  &:hover {
+    color: var(--color-primary-hover);
+  }
+  
+  &:focus-visible {
+    outline: 2px solid var(--color-focus-ring);
+    outline-offset: 2px;
+  }
+}
+
+// Images
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+// Lists
+ul, ol {
+  list-style: none;
+}
+
+// Buttons
+button {
+  background: none;
+  border: none;
+  font: inherit;
+  cursor: pointer;
+  color: inherit;
+  
+  &:focus-visible {
+    outline: 2px solid var(--color-focus-ring);
+    outline-offset: 2px;
+  }
+}
+
+// Inputs
+input, textarea, select {
+  font: inherit;
+  color: inherit;
+}
+
+// Tables
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+// Utility Classes
+.sr-only {
+  
+}
+
+.no-print {
+  @media print {
+    display: none !important;
+  }
+}
+
+// Theme specific body classes
+.theme-light {
+  color-scheme: light;
+}
+
+.theme-dark {
+  color-scheme: dark;
+}
+
+// Animation base
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+// Smooth transitions for theme switching
+* {
+  transition-property: background-color, border-color, color, fill, stroke;
+  transition-duration: var(--transition-fast);
+  transition-timing-function: ease-in-out;
+}
